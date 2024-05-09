@@ -277,13 +277,15 @@ namespace RecipeApp
             }
 
 
-            Console.ForegroundColor= ConsoleColor.DarkMagenta;
+            
             Console.WriteLine("Your List of Recipes");
             foreach (string recipeName in recipeNames.OrderBy(name => name))
             {
+                Console.ForegroundColor = ConsoleColor.DarkMagenta;
                 Console.WriteLine(recipeNames);
+                Console.ResetColor();
             }
-            Console.ResetColor();
+            
         }
         // user can choose which recipe to display from the list
 
