@@ -291,6 +291,7 @@ namespace RecipeApp
         {
             if (ingredients.Length == 0 || steps.Length == 0)
             {
+                //add colour to error message to make it stand out
                 Console.ForegroundColor = ConsoleColor.Red;
                 //add error message if no recipe details were found
                 Console.WriteLine("No recipe details found. Please enter recipe details first");
