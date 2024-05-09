@@ -311,13 +311,12 @@ namespace RecipeApp
             // display full details of selected recipe
             if (int.TryParse(Console.ReadLine(), out selectedRecipeIndex) && selectedRecipeIndex >=1 && selectedRecipeIndex <= recipeNames.Count )
             {
-                selectedRecipeIndex--;
                 Console.ForegroundColor = ConsoleColor.Cyan;
-                Console.WriteLine($"How to make {Console.ForegroundColor = ConsoleColor.Blue}{selectedRecipeIndex}{Console.ResetColor} " +
-                    $"in just {Console.ForegroundColor = ConsoleColor.Blue} {steps.Length} {Console.ResetColor} simple steps!");
-                Console.ResetColor();
+                selectedRecipeIndex--;
+                Console.WriteLine($"How to make {selectedRecipeIndex} in just {steps.Length} simple step(s)!");
+                
 
-                Console.WriteLine($"Number of ingredients: {ingredients.Length}");
+                Console.WriteLine($"\nNumber of ingredients: {ingredients.Length}");
                 Console.WriteLine($"Number of steps: {steps.Length} ");
                 //the software shall notify the user when the total calories of a recipe exceed 300
                 double totalCalories = ingredients.Sum(ingredient => ingredient.Calories * ingredient.Quantity);
