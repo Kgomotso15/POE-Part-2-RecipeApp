@@ -313,7 +313,8 @@ namespace RecipeApp
             {
                 selectedRecipeIndex--;
                 Console.ForegroundColor = ConsoleColor.Cyan;
-                Console.WriteLine($"Recipe: {selectedRecipeIndex}");
+                Console.WriteLine($"How to make {Console.ForegroundColor = ConsoleColor.Blue}{selectedRecipeIndex}{Console.ResetColor} " +
+                    $"in just {Console.ForegroundColor = ConsoleColor.Blue} {steps.Length} {Console.ResetColor} simple steps!");
                 Console.ResetColor();
 
                 Console.WriteLine($"Number of ingredients: {ingredients.Length}");
