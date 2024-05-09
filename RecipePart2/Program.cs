@@ -309,15 +309,32 @@ namespace RecipeApp
             Console.ResetColor();
 
             // display full details of selected recipe
-            if (int.TryParse(Console.ReadLine(), out selectedRecipeIndex) && selectedRecipeIndex >=1 && selectedRecipeIndex <= recipeNames.Count )
+            if (int.TryParse(Console.ReadLine(), out selectedRecipeIndex) && selectedRecipeIndex >= 1 && selectedRecipeIndex <= recipeNames.Count)
             {
                 Console.ForegroundColor = ConsoleColor.Cyan;
                 selectedRecipeIndex--;
                 Console.WriteLine($"How to make {selectedRecipeIndex} in just {steps.Length} simple step(s)!");
-                
+                Console.WriteLine($"Let's get started");
+
 
                 Console.WriteLine($"\nNumber of ingredients: {ingredients.Length}");
                 Console.WriteLine($"Number of steps: {steps.Length} ");
+
+                //output the recipe ingredients
+                Console.WriteLine("\nIngredients:");
+                for (int i = 0; i < ingredients.Length; i++)
+                {
+                    Console.WriteLine($" {i + 1}. {ingredients[i].Quantity} {ingredients[i].UnitOfMeasurement} of {ingredients[i].Name}");
+                }
+
+                //display the recipe steps
+                Console.WriteLine("\nSteps:");
+                for (int i = 0; i < steps.Length; i++)
+                {
+                    Console.WriteLine($"Step {i + 1}: {steps[i]}");
+                }
+
+                Console.WriteLine("\nNutritional Facts: ");
                 //the software shall notify the user when the total calories of a recipe exceed 300
                 double totalCalories = ingredients.Sum(ingredient => ingredient.Calories * ingredient.Quantity);
                 Console.WriteLine($"Total Calories: {totalCalories}");
@@ -328,20 +345,12 @@ namespace RecipeApp
                     Console.WriteLine("Warning: Total calories exceed 300!");
                     Console.ResetColor();
                 }
-
-                //output the recipe ingredients
-                Console.WriteLine("\nIngredients:");
                 for (int i = 0; i < ingredients.Length; i++)
                 {
-                    Console.WriteLine($" {i + 1}. {ingredients[i].Quantity} {ingredients[i].UnitOfMeasurement} of {ingredients[i].Name}({ingredients[i].Foodgroup})");
+                    Console.WriteLine($"Foodgroups: {ingredients[i].Name} {ingredients[i].Foodgroup}");
                 }
 
-                //display the recipe steps
-                Console.WriteLine("\nSteps:");
-                for (int i = 0; i < steps.Length; i++)
-                {
-                    Console.WriteLine($"Step {i + 1}: {steps[i]}");
-                }
+                Console.WriteLine("We Hope you enjoy!");
                 Console.ResetColor();
             }
             else
