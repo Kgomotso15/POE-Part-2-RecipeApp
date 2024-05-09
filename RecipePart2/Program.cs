@@ -276,8 +276,6 @@ namespace RecipeApp
                 return;
             }
 
-
-            
             Console.WriteLine("Your List of Recipes");
             foreach (string recipeName in recipeNames.OrderBy(name => name))
             {
