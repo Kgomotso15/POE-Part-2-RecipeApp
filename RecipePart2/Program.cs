@@ -313,8 +313,8 @@ namespace RecipeApp
             {
                 Console.ForegroundColor = ConsoleColor.Cyan;
                 selectedRecipeIndex--;
-                Console.WriteLine($"How to make {selectedRecipeIndex} in just {steps.Length} simple step(s)!");
-                Console.WriteLine($"Let's get started");
+                Console.WriteLine($"How to make {selectedRecipeIndex} in just {steps.Length} simple step(s).");
+                Console.WriteLine($"Let's get started!");
 
 
                 Console.WriteLine($"\nNumber of ingredients: {ingredients.Length}");
@@ -335,27 +335,32 @@ namespace RecipeApp
                 }
 
                 Console.WriteLine("\nNutritional Facts: ");
+                
+                for (int i = 0; i < ingredients.Length; i++)
+                {
+                    Console.WriteLine($"Foodgroups: {ingredients[i].Name} = {ingredients[i].Foodgroup}");
+                }
+
                 //the software shall notify the user when the total calories of a recipe exceed 300
                 double totalCalories = ingredients.Sum(ingredient => ingredient.Calories * ingredient.Quantity);
-                Console.WriteLine($"Total Calories: {totalCalories}");
+                Console.WriteLine($"\nTotal Calories: {totalCalories}");
 
                 if (totalCalories > 300)
                 {
-                    Console.ForegroundColor = ConsoleColor.Yellow;
+                    Console.ForegroundColor = ConsoleColor.DarkCyan;
                     Console.WriteLine("Warning: Total calories exceed 300!");
                     Console.ResetColor();
                 }
-                for (int i = 0; i < ingredients.Length; i++)
-                {
-                    Console.WriteLine($"Foodgroups: {ingredients[i].Name} {ingredients[i].Foodgroup}");
-                }
 
-                Console.WriteLine("We Hope you enjoy!");
+                Console.ForegroundColor = ConsoleColor.Cyan;
+                Console.WriteLine("\nWe Hope you enjoy!");
                 Console.ResetColor();
             }
             else
             {
+                Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine("Recipe not found");
+                Console.ResetColor();
             }
         }        
         // add method to scale the recipe quantity
@@ -424,7 +429,9 @@ namespace RecipeApp
             }
             else
             {
+                Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine("Recipe not found");
+                Console.ResetColor();
             }
         }
 
@@ -466,7 +473,9 @@ namespace RecipeApp
             }
             else
             {
-                Console.WriteLine("No recepes found");
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("Recipe not found");
+                Console.ResetColor();
             }
         }
 
@@ -520,6 +529,12 @@ namespace RecipeApp
                     Console.ResetColor();
                 }
             }
-        }   
+            else
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("Recipe not found");
+                Console.ResetColor();
+            }
+        }
     }
 }
