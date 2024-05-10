@@ -108,22 +108,23 @@ namespace RecipeApp
     class Recipe
     {
 
-        //add arrays
-        private Ingredient[] ingredients;
-        private string[] steps;
+        private List<Ingredient> ingredients;
+        private List<string> steps;
+        private List<string> recipeNames;
         private int ingredientCount;
         private int stepCount;
-        private List<string> recipeNames;
+        
        // private int recipeCount;
 
         //add constructor to initialise arrays
         public Recipe()
         {
-            ingredients = new Ingredient[10]; // Initial size, can be adjusted as needed
-            steps = new string[10]; // Initial size, can be adjusted as needed
+            ingredients = new List<Ingredient>(); 
+            steps = new List<string>();
+            recipeNames = new List<string>();
             ingredientCount = 0;
             stepCount = 0;
-            recipeNames = new List<string>();
+            
             //recipeCount = 0;
         }
 
@@ -172,7 +173,7 @@ namespace RecipeApp
                     Console.ResetColor();
                 }
 
-                ingredients = new Ingredient[numberOfIngredients]; // Resize the array based on user input
+                //ingredients = new Ingredient[numberOfIngredients]; // Resize the array based on user input
 
                 //loop to input each ingredient
                 for (int i = 0; i < numberOfIngredients; i++)
@@ -246,7 +247,7 @@ namespace RecipeApp
                     break;
                 }
 
-                steps = new string[numberOfSteps]; // Resize the array based on user input
+                //steps = new string[numberOfSteps]; // Resize the array based on user input
 
                 //loop to input each step
                 for (int i = 0; i < numberOfSteps; i++)
@@ -289,7 +290,7 @@ namespace RecipeApp
 
         public void DisplayFullRecipe()
         {
-            if (ingredients.Length == 0 || steps.Length == 0)
+            if (ingredients.Count == 0 || steps.Count == 0)
             {
                 //add colour to error message to make it stand out
                 Console.ForegroundColor = ConsoleColor.Red;
@@ -313,30 +314,30 @@ namespace RecipeApp
             {
                 Console.ForegroundColor = ConsoleColor.Cyan;
                 selectedRecipeIndex--;
-                Console.WriteLine($"How to make {selectedRecipeIndex} in just {steps.Length} simple step(s).");
+                Console.WriteLine($"How to make {selectedRecipeIndex} in just {steps.Count} simple step(s).");
                 Console.WriteLine($"Let's get started!");
 
 
-                Console.WriteLine($"\nNumber of ingredients: {ingredients.Length}");
-                Console.WriteLine($"Number of steps: {steps.Length} ");
+                Console.WriteLine($"\nNumber of ingredients: {ingredients.Count}");
+                Console.WriteLine($"Number of steps: {steps.Count} ");
 
                 //output the recipe ingredients
                 Console.WriteLine("\nIngredients:");
-                for (int i = 0; i < ingredients.Length; i++)
+                for (int i = 0; i < ingredients.Count; i++)
                 {
                     Console.WriteLine($" {i + 1}. {ingredients[i].Quantity} {ingredients[i].UnitOfMeasurement} of {ingredients[i].Name}");
                 }
 
                 //display the recipe steps
                 Console.WriteLine("\nSteps:");
-                for (int i = 0; i < steps.Length; i++)
+                for (int i = 0; i < steps.Count; i++)
                 {
                     Console.WriteLine($"Step {i + 1}: {steps[i]}");
                 }
 
                 Console.WriteLine("\nNutritional Facts: ");
                 
-                for (int i = 0; i < ingredients.Length; i++)
+                for (int i = 0; i < ingredients.Count; i++)
                 {
                     Console.WriteLine($"Foodgroups : {ingredients[i].Name} = {ingredients[i].Foodgroup}");
                 }
@@ -366,7 +367,7 @@ namespace RecipeApp
         // add method to scale the recipe quantity
         public void ScaleRecipe()
         {
-            if (ingredients.Length == 0)
+            if (ingredients.Count == 0)
             {
                 //add colour to the error message
                 Console.ForegroundColor = ConsoleColor.Red;
@@ -438,7 +439,7 @@ namespace RecipeApp
         //add method
         public void ResetQuantities()
         {
-            if (ingredients.Length == 0)
+            if (ingredients.Count == 0)
             {
                 Console.ForegroundColor = ConsoleColor.Red;
                 //add error message if no recipe details are foung
@@ -482,7 +483,7 @@ namespace RecipeApp
         //create method to clear all the reipe data
         public void ClearAllData()
         {
-            if (ingredients.Length == 0)
+            if (ingredients.Count == 0)
             {
                 // Display error message if no recipe details were found
                 Console.ForegroundColor = ConsoleColor.Red;
@@ -510,11 +511,13 @@ namespace RecipeApp
                 if (confirmation == "Y")
                 {
                     //clear all the ingredients and steps
-                    ingredients = new Ingredient[0];  // Resetting to empty arrays
-                    steps = new string[0];
+                    //ingredients = new Ingredient[0];  // Resetting to empty arrays
+                    //steps = new string[0];
+                    ingredients.Clear();
+                    steps.Clear();
 
-                    ingredientCount = 0;  // Resetting ingredientCount
-                    stepCount = 0;  // Resetting stepCount
+                    //ingredientCount = 0;  // Resetting ingredientCount
+                    //stepCount = 0;  // Resetting stepCount
 
                     Console.ForegroundColor = ConsoleColor.Green;
                     //display success message
