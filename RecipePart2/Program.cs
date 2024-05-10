@@ -338,7 +338,7 @@ namespace RecipeApp
                 
                 for (int i = 0; i < ingredients.Length; i++)
                 {
-                    Console.WriteLine($"Foodgroups: {ingredients[i].Name} = {ingredients[i].Foodgroup}");
+                    Console.WriteLine($"Foodgroups : {ingredients[i].Name} = {ingredients[i].Foodgroup}");
                 }
 
                 //the software shall notify the user when the total calories of a recipe exceed 300
