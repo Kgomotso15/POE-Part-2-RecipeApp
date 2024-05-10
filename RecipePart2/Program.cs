@@ -116,7 +116,6 @@ namespace RecipeApp
         
        // private int recipeCount;
 
-        //add constructor to initialise arrays
         public Recipe()
         {
             ingredients = new List<Ingredient>(); 
