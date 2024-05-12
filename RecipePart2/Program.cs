@@ -240,7 +240,7 @@ namespace RecipeApp
                     Console.WriteLine($"Please enter the unit of measurement for ingredient {i + 1}: ");
                     ingredient.UnitOfMeasurement = Console.ReadLine();
 
-                    Console.WriteLine($"Please enter the number of calories for ingredient {i + 1}: ");
+                    Console.WriteLine($"Please enter the number of calories for ingredient {i + 1} (per unit of measurent e.g per liters/cup): ");
                     double ingredientCalories;
                     if (double.TryParse(Console.ReadLine(), out ingredientCalories))
                     {
