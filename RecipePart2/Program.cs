@@ -111,8 +111,8 @@ namespace RecipeApp
         private List<Ingredient> ingredients;
         private List<string> steps;
         private List<string> recipeNames;
-        private int ingredientCount;
-        private int stepCount;
+        //private int ingredientCount;
+        //private int stepCount;
         
        // private int recipeCount;
 
@@ -121,8 +121,8 @@ namespace RecipeApp
             ingredients = new List<Ingredient>(); 
             steps = new List<string>();
             recipeNames = new List<string>();
-            ingredientCount = 0;
-            stepCount = 0;
+            //ingredientCount = 0;
+            //stepCount = 0;
             
             //recipeCount = 0;
         }
@@ -141,6 +141,7 @@ namespace RecipeApp
         //create method to enter recipe
         public void EnterRecipeDetails()
         {
+
             if (recipeNames.Count == 0 )
             {
                 Console.ForegroundColor = ConsoleColor.Red;
@@ -150,6 +151,7 @@ namespace RecipeApp
                 return;
             }
 
+            
             Console.ForegroundColor = ConsoleColor.DarkMagenta;
             Console.WriteLine("Please Enter the number of the recipe you want to add details to:");
             int selectedRecipeIndex;
