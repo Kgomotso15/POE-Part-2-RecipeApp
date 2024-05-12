@@ -184,10 +184,7 @@ namespace RecipeApp
                     //ask user to enter ingredient name
                     Console.WriteLine($"Please enter the name of ingredient {i + 1}: ");
                     ingredient.Name = Console.ReadLine();
-
-                    //for each ingredient, the user shall additioonally be able to enter the number of calories and the food griup that the ingredient belongs to
-                    //foreach (ingredient.Name)
-                    {
+                    
                         Console.WriteLine($"Please enter the number of calories for ingredient {i + 1}: ");
                         double ingredientCalories;
                         if (double.TryParse(Console.ReadLine(), out ingredientCalories))
@@ -206,7 +203,7 @@ namespace RecipeApp
 
                         Console.WriteLine($"Please enter the Food group for ingredient {i + 1}: ");
                         ingredient.Foodgroup = Console.ReadLine();
-                    }
+                    
 
                     //prompt user to enter ingredient quantity
                     Console.WriteLine($"Please enter the quantity of ingredient {i + 1}: ");
