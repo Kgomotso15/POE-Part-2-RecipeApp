@@ -17,7 +17,7 @@ namespace RecipeApp
             //method to handle calorie exceedance notification
             static void HandleCalorieExceedance(double totalCalories)
             {
-                Console.ForegroundColor = ConsoleColor.DarkCyan;
+                Console.ForegroundColor = ConsoleColor.Yellow;
                 Console.WriteLine($"Warning: Total calories ({totalCalories}) exceed 300!");
                 Console.ResetColor();
             }
