@@ -229,7 +229,7 @@ namespace RecipeApp
                     Console.WriteLine($"Please enter the unit of measurement for ingredient {i + 1}: ");
                     ingredient.UnitOfMeasurement = Console.ReadLine();
 
-                    ingredients[i] = ingredient;
+                    ingredients.Add(ingredient);
                 }
 
                 //ask user to enter the number of steps
@@ -254,7 +254,7 @@ namespace RecipeApp
                 for (int i = 0; i < numberOfSteps; i++)
                 {
                     Console.WriteLine($"Please enter a description of what the user should do for step {i + 1}:");
-                    steps[i] = Console.ReadLine();
+                    steps.Add(Console.ReadLine());
                 }
 
                 //add successful message 
@@ -282,10 +282,9 @@ namespace RecipeApp
             foreach (string recipeName in recipeNames.OrderBy(name => name))
             {
                 Console.ForegroundColor = ConsoleColor.DarkMagenta;
-                Console.WriteLine(recipeNames);
+                Console.WriteLine(recipeName);
                 Console.ResetColor();
             }
-            
         }
         // user can choose which recipe to display from the list
 
