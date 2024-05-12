@@ -185,7 +185,38 @@ namespace RecipeApp
                     Console.WriteLine($"Please enter the name of ingredient {i + 1}: ");
                     ingredient.Name = Console.ReadLine();
 
-                    Console.WriteLine($"Please enter the Food group for ingredient {i + 1}: ");
+                    Console.WriteLine($"Please enter the Food group for ingredient {i + 1} from the options below:\n"
+                                     + "1. - Fruit and Vegetables\n"
+                                     + "2. - Dairy\n"
+                                     + "3. - Carbohydrants and Grains\n"
+                                     + "4. - Protein\n"
+                                     + "5. - Fats and Sugars");
+                    int foodgroup;
+                    if (int.TryParse(Console.ReadLine(), out foodgroup))
+
+                    switch (foodgroup)
+                    {
+                        case 1:
+                        case 2:
+                        case 3:
+                        case 4:
+                        case 5:
+
+                            //Console.ForegroundColor = ConsoleColor.Green;
+                            //show success message
+                            //Console.WriteLine("You have successfully scaled the recipe");
+                            //Console.ResetColor();
+                            break;
+
+                        default:
+                            Console.ForegroundColor = ConsoleColor.Red;
+                            // add error message for invalid input
+                            Console.WriteLine("Invalid selection. Please kindly try again.");
+                            Console.ResetColor();
+                            break;
+
+                    }
+
                     ingredient.Foodgroup = Console.ReadLine();
                     
                     //prompt user to enter ingredient quantity
