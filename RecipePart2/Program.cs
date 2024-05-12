@@ -4,12 +4,24 @@ using System.Linq;
 
 namespace RecipeApp
 {
+    //define delegate type for calorie notification
+    public delegate void CalorieNotification(double totalCalories);
     class Program
     {
         static void Main()
         {
             //Initialise a recipe object
             Recipe recipe = new Recipe();
+            recipe.NotifyCalorieExceedance += HandleCalorieExceedance;
+
+            //method to handle calorie exceedance notification
+            static void HandleCalorieExceedance(double totalCalories)
+            {
+                Console.ForegroundColor = ConsoleColor.DarkCyan;
+                Console.WriteLine($"Warning: Total calories ({totalCalories}) exceed 300!");
+                Console.ResetColor();
+            }
+
             bool exit = false;
 
             //add welcome message for the user
@@ -111,20 +123,15 @@ namespace RecipeApp
         private List<Ingredient> ingredients;
         private List<string> steps;
         private List<string> recipeNames;
-        //private int ingredientCount;
-        //private int stepCount;
+        //declare event for calorie notification
+        public event CalorieNotification NotifyCalorieExceedance;
         
-       // private int recipeCount;
 
         public Recipe()
         {
             ingredients = new List<Ingredient>(); 
             steps = new List<string>();
-            recipeNames = new List<string>();
-            //ingredientCount = 0;
-            //stepCount = 0;
-            
-            //recipeCount = 0;
+            recipeNames = new List<string>();            
         }
 
         public void EnterNewRecipe()
@@ -201,7 +208,6 @@ namespace RecipeApp
                         case 3:
                         case 4:
                         case 5:
-
                             //Console.ForegroundColor = ConsoleColor.Green;
                             //show success message
                             //Console.WriteLine("You have successfully scaled the recipe");
@@ -251,7 +257,7 @@ namespace RecipeApp
                     {
                         //display error message for invalid input
                         Console.ForegroundColor = ConsoleColor.Red;
-                        Console.WriteLine("Invalid input! The ingredient Quantity must be a number.");
+                        Console.WriteLine("Invalid input! The ingredient calories must be a number.");
                         Console.ResetColor();
                         return;
                     }
@@ -371,13 +377,9 @@ namespace RecipeApp
 
                 //the software shall notify the user when the total calories of a recipe exceed 300
                 double totalCalories = ingredients.Sum(ingredient => ingredient.Calories * ingredient.Quantity);
-                Console.WriteLine($"\nTotal Calories: {totalCalories}");
-
-                if (totalCalories > 300)
+                if (totalCalories > 300 && NotifyCalorieExceedance !=null )
                 {
-                    Console.ForegroundColor = ConsoleColor.DarkCyan;
-                    Console.WriteLine("Warning: Total calories exceed 300!");
-                    Console.ResetColor();
+                    NotifyCalorieExceedance(totalCalories);
                 }
 
                 Console.ForegroundColor = ConsoleColor.Cyan;
