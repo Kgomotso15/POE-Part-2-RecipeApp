@@ -184,27 +184,10 @@ namespace RecipeApp
                     //ask user to enter ingredient name
                     Console.WriteLine($"Please enter the name of ingredient {i + 1}: ");
                     ingredient.Name = Console.ReadLine();
-                    
-                        Console.WriteLine($"Please enter the number of calories for ingredient {i + 1}: ");
-                        double ingredientCalories;
-                        if (double.TryParse(Console.ReadLine(), out ingredientCalories))
-                        {
-                            ingredient.Calories = ingredientCalories;
-                            //ingredient.OriginaCalories = ingredientCalories; // Store original quantity
-                        }
-                        else
-                        {
-                            //display error message for invalid input
-                            Console.ForegroundColor = ConsoleColor.Red;
-                            Console.WriteLine("Invalid input! The ingredient Quantity must be a number.");
-                            Console.ResetColor();
-                            return;
-                        }
 
-                        Console.WriteLine($"Please enter the Food group for ingredient {i + 1}: ");
-                        ingredient.Foodgroup = Console.ReadLine();
+                    Console.WriteLine($"Please enter the Food group for ingredient {i + 1}: ");
+                    ingredient.Foodgroup = Console.ReadLine();
                     
-
                     //prompt user to enter ingredient quantity
                     Console.WriteLine($"Please enter the quantity of ingredient {i + 1}: ");
                     double ingredientQuantity;
@@ -225,6 +208,22 @@ namespace RecipeApp
                     //prompt user to enter unit of measurement
                     Console.WriteLine($"Please enter the unit of measurement for ingredient {i + 1}: ");
                     ingredient.UnitOfMeasurement = Console.ReadLine();
+
+                    Console.WriteLine($"Please enter the number of calories for ingredient {i + 1}: ");
+                    double ingredientCalories;
+                    if (double.TryParse(Console.ReadLine(), out ingredientCalories))
+                    {
+                        ingredient.Calories = ingredientCalories;
+                        //ingredient.OriginaCalories = ingredientCalories; // Store original quantity
+                    }
+                    else
+                    {
+                        //display error message for invalid input
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.WriteLine("Invalid input! The ingredient Quantity must be a number.");
+                        Console.ResetColor();
+                        return;
+                    }
 
                     ingredients.Add(ingredient);
                 }
