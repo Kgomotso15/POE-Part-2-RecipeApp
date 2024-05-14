@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace RecipeApp
+namespace RecipePart2
 {
     //define delegate type for calorie notification
     public delegate void CalorieNotification(double totalCalories);
@@ -224,6 +224,7 @@ namespace RecipeApp
 
                     ingredient.Foodgroup = Console.ReadLine();
 
+                    while (true)
                     //prompt user to enter ingredient quantity
                     Console.WriteLine($"Please enter the quantity of ingredient {i + 1}: ");
                     double ingredientQuantity;
@@ -231,6 +232,7 @@ namespace RecipeApp
                     {
                         ingredient.Quantity = ingredientQuantity;
                         ingredient.OriginalQuantity = ingredientQuantity; // Store original quantity
+                        break;
                     }
                     else
                     {
@@ -238,7 +240,6 @@ namespace RecipeApp
                         Console.ForegroundColor = ConsoleColor.Red;
                         Console.WriteLine("Invalid input! The ingredient Quantity must be a number.");
                         Console.ResetColor();
-                        return;
                     }
 
                     //prompt user to enter unit of measurement
