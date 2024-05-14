@@ -36,7 +36,7 @@ namespace RecipeApp
                 Console.WriteLine("\nPlease Select an option\n"
                                   + "1. - Enter new Recipe\n"
                                   + "2. - Enter Recipe Details\n"
-                                  + "3. - Display All Recipes\n"  
+                                  + "3. - Display List of Recipes\n"
                                   + "4. - Display Full Recipe\n"
                                   + "5. - Scale Recipe\n"
                                   + "6. - Reset Quantities\n"
@@ -56,7 +56,7 @@ namespace RecipeApp
                             recipe.EnterRecipeDetails();
                             break;
                         case 3:
-                            recipe.DisplayAllRecipes();
+                            recipe.DisplayListOfRecipes();
                             break;
                         case 4:
                             recipe.DisplayFullRecipe();
@@ -104,9 +104,9 @@ namespace RecipeApp
         public double Quantity { get; set; }
         public string UnitOfMeasurement { get; set; }
         public double OriginalQuantity { get; set; }
-        public double Calories {  get; set; }
-        public string Foodgroup { get; set;}
-        
+        public double Calories { get; set; }
+        public string Foodgroup { get; set; }
+
 
         //add this method to reset the ingredient quantity to its original form
         public void ResetQuantity()
@@ -123,15 +123,17 @@ namespace RecipeApp
         private List<Ingredient> ingredients;
         private List<string> steps;
         private List<string> recipeNames;
+        private List<string> foodgroup;
         //declare event for calorie notification
         public event CalorieNotification NotifyCalorieExceedance;
-        
+
 
         public Recipe()
         {
-            ingredients = new List<Ingredient>(); 
+            ingredients = new List<Ingredient>();
             steps = new List<string>();
-            recipeNames = new List<string>();            
+            recipeNames = new List<string>();
+            foodgroup = new List<string>();
         }
 
         public void EnterNewRecipe()
@@ -149,7 +151,7 @@ namespace RecipeApp
         public void EnterRecipeDetails()
         {
 
-            if (recipeNames.Count == 0 )
+            if (recipeNames.Count == 0)
             {
                 Console.ForegroundColor = ConsoleColor.Red;
                 //add error message if no recipe was found
@@ -158,7 +160,7 @@ namespace RecipeApp
                 return;
             }
 
-            
+
             Console.ForegroundColor = ConsoleColor.DarkMagenta;
             Console.WriteLine("Please Enter the number of the recipe you want to add details to:");
             int selectedRecipeIndex;
@@ -201,30 +203,27 @@ namespace RecipeApp
                     int foodgroup;
                     if (int.TryParse(Console.ReadLine(), out foodgroup))
 
-                    switch (foodgroup)
-                    {
-                        case 1:
-                        case 2:
-                        case 3:
-                        case 4:
-                        case 5:
-                            //Console.ForegroundColor = ConsoleColor.Green;
-                            //show success message
-                            //Console.WriteLine("You have successfully scaled the recipe");
-                            //Console.ResetColor();
-                            break;
+                        switch (foodgroup)
+                        {
+                            case 1:
+                            case 2:
+                            case 3:
+                            case 4:
+                            case 5:
+                            case 6:
+                                break;
 
-                        default:
-                            Console.ForegroundColor = ConsoleColor.Red;
-                            // add error message for invalid input
-                            Console.WriteLine("Invalid selection. Please kindly try again.");
-                            Console.ResetColor();
-                            break;
+                            default:
+                                Console.ForegroundColor = ConsoleColor.Red;
+                                // add error message for invalid input
+                                Console.WriteLine("Invalid selection. Please kindly try again.");
+                                Console.ResetColor();
+                                break;
 
-                    }
+                        }
 
                     ingredient.Foodgroup = Console.ReadLine();
-                    
+
                     //prompt user to enter ingredient quantity
                     Console.WriteLine($"Please enter the quantity of ingredient {i + 1}: ");
                     double ingredientQuantity;
@@ -300,9 +299,12 @@ namespace RecipeApp
         //add method is display the full recipe
 
         //display a list of all the recipes to the user in alphabetical order by name
-        public void DisplayAllRecipes()
+        /// <summary>
+        /// 
+        /// </summary>
+        public void DisplayListOfRecipes()
         {
-            if (recipeNames.Count == 0) 
+            if (recipeNames.Count == 0)
             {
                 Console.ForegroundColor = ConsoleColor.Red;
                 //add error message if no recipe name was found
@@ -342,16 +344,17 @@ namespace RecipeApp
             }
             Console.ResetColor();
 
+
             // display full details of selected recipe
             if (int.TryParse(Console.ReadLine(), out selectedRecipeIndex) && selectedRecipeIndex >= 1 && selectedRecipeIndex <= recipeNames.Count)
             {
                 Console.ForegroundColor = ConsoleColor.Cyan;
                 selectedRecipeIndex--;
-                Console.WriteLine($"How to make {selectedRecipeIndex} in just {steps.Count} simple step(s).");
+                Console.WriteLine($"How to make {recipeNames[selectedRecipeIndex]} in just {steps.Count} simple step(s).");
                 Console.WriteLine($"Let's get started!");
 
-
-                Console.WriteLine($"\nNumber of ingredients: {ingredients.Count}");
+                Console.WriteLine($"\nName of Recipe: {recipeNames[selectedRecipeIndex]}");
+                Console.WriteLine($"Number of ingredients: {ingredients.Count}");
                 Console.WriteLine($"Number of steps: {steps.Count} ");
 
                 //output the recipe ingredients
@@ -369,15 +372,48 @@ namespace RecipeApp
                 }
 
                 Console.WriteLine("\nNutritional Facts: ");
-                
-                for (int i = 0; i < ingredients.Count; i++)
+
+                //for (int i = 0; i < ingredients.Count; i++)
+                foreach (Ingredient ingredient in ingredients)
                 {
-                    Console.WriteLine($"Foodgroups : {ingredients[i].Name} = {ingredients[i].Foodgroup}");
+                    string foodGroupName = "";
+                    switch (ingredient.Foodgroup)
+                    {
+                        case "1":
+                            ingredient.Foodgroup = "Fruit and Vegetables";
+                            break;
+                        case "2":
+                            ingredient.Foodgroup = "Dairy";
+                            break;
+                        case "3":
+                            ingredient.Foodgroup = "Carbohydrates and Grains";
+                            break;
+                        case "4":
+                            ingredient.Foodgroup = "Fruit and Vegetables";
+                            break;
+                        case "5":
+                            ingredient.Foodgroup = "Protein ";
+                            break;
+                        case "6":
+                            ingredient.Foodgroup = "Other";
+                            break;
+                        default:
+                            //add colour for the error message 
+                            Console.ForegroundColor = ConsoleColor.Red;
+                            //add error message for invalid choice selection
+                            Console.WriteLine("Invalid selection. Please kindly try again.");
+                            Console.ResetColor();
+                            break;
+
+                    }
+                    //ingredient.Foodgroup = foodGroupName;
+                    Console.WriteLine($"{ingredient.Name} belongs to food group: {foodgroup}");
                 }
 
                 //the software shall notify the user when the total calories of a recipe exceed 300
                 double totalCalories = ingredients.Sum(ingredient => ingredient.Calories * ingredient.Quantity);
-                if (totalCalories > 300 && NotifyCalorieExceedance !=null )
+                Console.WriteLine($"\nTotal Calories: {totalCalories}");
+                if (totalCalories > 300 && NotifyCalorieExceedance != null)
                 {
                     NotifyCalorieExceedance(totalCalories);
                 }
@@ -392,8 +428,8 @@ namespace RecipeApp
                 Console.WriteLine("Recipe not found");
                 Console.ResetColor();
             }
-        }        
-        // add method to scale the recipe quantity
+        }
+        // add method to scale the recipe quantity///
         public void ScaleRecipe()
         {
             if (ingredients.Count == 0)
