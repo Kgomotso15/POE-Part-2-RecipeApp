@@ -18,6 +18,7 @@ namespace RecipeAppPart2
             // Method to handle calorie exceedance notification
             static void HandleCalorieExceedance(double totalCalories)
             {
+                //display warning message if calories exceed 300
                 Console.ForegroundColor = ConsoleColor.Yellow;
                 Console.WriteLine($"Warning: Total calories ({totalCalories}) exceed 300!");
                 Console.WriteLine($"Note:Consuming more calories than you burn leads to excess energy being stored as fat.");
@@ -106,6 +107,7 @@ namespace RecipeAppPart2
 
         public RecipeDetails()
         {
+            //initialize lists
             Ingredients = new List<Ingredient>();
             Steps = new List<string>();
             recipeNames = new List<string>();
@@ -145,6 +147,7 @@ namespace RecipeAppPart2
 
         public Recipe()
         {
+            //initialize lists and dictionary
             ingredients = new List<Ingredient>();
             steps = new List<string>();
             recipeNames = new List<string>();
@@ -152,6 +155,7 @@ namespace RecipeAppPart2
             recipeDetailsMap = new Dictionary<string, RecipeDetails>();
         }
 
+        //method to enter a new recipe
         public void EnterNewRecipe()
         {
             Console.WriteLine("Please enter the name of the recipe: ");
@@ -160,6 +164,7 @@ namespace RecipeAppPart2
             recipeNames.Sort(); // Sort the recipe names
             recipeDetailsMap[recipeName] = new RecipeDetails();
 
+            //output success message
             Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine("Recipe has been successfully entered!");
             Console.ResetColor();
@@ -195,6 +200,7 @@ namespace RecipeAppPart2
                 int numberOfIngredients;
                 while (!int.TryParse(Console.ReadLine(), out numberOfIngredients))
                 {
+                    //display error message for invalid input
                     Console.ForegroundColor = ConsoleColor.Red;
                     Console.WriteLine("Invalid input! Please enter a number.");
                     Console.ResetColor();
@@ -207,6 +213,7 @@ namespace RecipeAppPart2
                     Console.WriteLine($"Please enter the name of ingredient {i + 1}: ");
                     ingredient.Name = Console.ReadLine();
 
+                    //loop to get valid food group input
                     while (true)
                     {
                         Console.WriteLine($"Please enter the Food group for ingredient {i + 1} from the options below:\n"
@@ -238,6 +245,7 @@ namespace RecipeAppPart2
                         }
                     }
 
+                    //loop to get valid quantity input
                     while (true)
                     {
                         Console.WriteLine($"Please enter the quantity of ingredient {i + 1}: ");
