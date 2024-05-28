@@ -20,6 +20,7 @@ namespace RecipeAppPart2
             {
                 Console.ForegroundColor = ConsoleColor.Yellow;
                 Console.WriteLine($"Warning: Total calories ({totalCalories}) exceed 300!");
+                Console.WriteLine($"Note:Consuming more calories than you burn leads to excess energy being stored as fat.");
                 Console.ResetColor();
             }
 
@@ -384,7 +385,8 @@ namespace RecipeAppPart2
 
                 double totalCalories = details.Ingredients.Sum(ingredient => ingredient.Calories * ingredient.Quantity);
                 Console.WriteLine($"\nTotal Calories: {totalCalories}");
-                Console.WriteLine($"(Note: Calories are units of energy that our bodies get from the food and drinks we consume)");
+                Console.WriteLine($"(Calories are units of energy that our bodies get " +
+                                    $"from the food and drinks we consume)");
                 if (totalCalories > 300 && NotifyCalorieExceedance != null)
                 {
                     NotifyCalorieExceedance(totalCalories);
