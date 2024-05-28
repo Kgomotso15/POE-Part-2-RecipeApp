@@ -285,7 +285,7 @@ namespace RecipeAppPart2
                     details.Ingredients.Add(ingredient);
                 }
 
-                Console.WriteLine($"Enter the number of steps: ");
+                Console.WriteLine($"Please Enter the number of steps: ");
                 int numberOfSteps;
                 while (!int.TryParse(Console.ReadLine(), out numberOfSteps))
                 {
