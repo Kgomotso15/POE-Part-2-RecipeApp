@@ -21,6 +21,7 @@ namespace RecipeAppPart2
                 //display warning message if calories exceed 300
                 Console.ForegroundColor = ConsoleColor.Yellow;
                 Console.WriteLine($"Warning: Total calories ({totalCalories}) exceed 300!");
+                //add explanation so that user can understand why the got a warning about exceeding 300
                 Console.WriteLine($"Note:Consuming more calories than you burn leads to excess energy being stored as fat.");
                 Console.ResetColor();
             }
@@ -268,6 +269,7 @@ namespace RecipeAppPart2
 
                     while (true)
                     {
+                        //prompt user to enter the amount of calories, also added an explanation in brackets
                         Console.WriteLine($"Please enter the number of calories for ingredient {i + 1} (per unit of measurement e.g per liters/cup): ");
                         if (double.TryParse(Console.ReadLine(), out double ingredientCalories))
                         {
@@ -358,17 +360,20 @@ namespace RecipeAppPart2
 
             if (int.TryParse(Console.ReadLine(), out selectedRecipeIndex) && selectedRecipeIndex >= 1 && selectedRecipeIndex <= recipeNames.Count)
             {
+                //display selected recipe
                 string selectedRecipeName = recipeNames[selectedRecipeIndex - 1];
                 RecipeDetails details = recipeDetailsMap[selectedRecipeName];
 
                 if (details.Ingredients.Count == 0 || details.Steps.Count == 0)
                 {
+                    //error message when user asks for a recipe that doesnt have details
                     Console.ForegroundColor = ConsoleColor.Red;
                     Console.WriteLine("No recipe details found. Please enter recipe details first.");
                     Console.ResetColor();
                     return;
                 }
 
+                //display full recipe
                 Console.ForegroundColor = ConsoleColor.Cyan;
                 Console.WriteLine($"How to make {selectedRecipeName} in just {details.Steps.Count} simple step(s).");
                 Console.WriteLine($"Let's get started!");
@@ -395,8 +400,10 @@ namespace RecipeAppPart2
                     Console.WriteLine($"{ingredient.Name} belongs to food group: {ingredient.FoodGroup}");
                 }
 
+                //display total calories
                 double totalCalories = details.Ingredients.Sum(ingredient => ingredient.Calories * ingredient.Quantity);
                 Console.WriteLine($"\nTotal Calories: {totalCalories}");
+                //add explanation as to what a calorie is
                 Console.WriteLine($"(Calories are units of energy that our bodies get " +
                                     $"from the food and drinks we consume)");
                 if (totalCalories > 300 && NotifyCalorieExceedance != null)
@@ -416,6 +423,7 @@ namespace RecipeAppPart2
             }
         }
 
+        //method to scale recipe
         public void ScaleRecipe()
         {
             if (recipeNames.Count == 0)
@@ -443,6 +451,7 @@ namespace RecipeAppPart2
 
                 if (details.Ingredients.Count == 0 || details.Steps.Count == 0)
                 {
+                    //enter this message when users ask for a non existing recipe
                     Console.ForegroundColor = ConsoleColor.Red;
                     Console.WriteLine("No recipe details found. Please enter recipe details first.");
                     Console.ResetColor();
@@ -489,6 +498,7 @@ namespace RecipeAppPart2
             }
         }
 
+        //method for resetting quantity
         public void ResetQuantities()
         {
             if (recipeNames.Count == 0)
@@ -511,6 +521,7 @@ namespace RecipeAppPart2
 
             if (int.TryParse(Console.ReadLine(), out selectedRecipeIndex) && selectedRecipeIndex >= 1 && selectedRecipeIndex <= recipeNames.Count)
             {
+                //displays selected recipe for reset
                 string selectedRecipeName = recipeNames[selectedRecipeIndex - 1];
                 RecipeDetails details = recipeDetailsMap[selectedRecipeName];
 
@@ -540,6 +551,7 @@ namespace RecipeAppPart2
             }
         }
 
+        //method for clearing data
         public void ClearAllData()
         {
             if (recipeNames.Count == 0)
@@ -567,12 +579,14 @@ namespace RecipeAppPart2
 
                 if (details.Ingredients.Count == 0 || details.Steps.Count == 0)
                 {
+                    //add errror message
                     Console.ForegroundColor = ConsoleColor.Red;
                     Console.WriteLine("No recipe details found. Please enter recipe details first.");
                     Console.ResetColor();
                     return;
                 }
 
+                //ask for confirmation before clearing
                 Console.WriteLine("Are you sure you want to clear all data? (Y/N)");
                 string confirmation = Console.ReadLine().ToUpper();
 
