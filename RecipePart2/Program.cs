@@ -2,19 +2,20 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace RecipePart2
+namespace RecipeAppPart2
 {
-    //define delegate type for calorie notification
+    // Define delegate type for calorie notification
     public delegate void CalorieNotification(double totalCalories);
+
     class Program
     {
         static void Main()
         {
-            //Initialise a recipe object
+            // Initialize a recipe object
             Recipe recipe = new Recipe();
             recipe.NotifyCalorieExceedance += HandleCalorieExceedance;
 
-            //method to handle calorie exceedance notification
+            // Method to handle calorie exceedance notification
             static void HandleCalorieExceedance(double totalCalories)
             {
                 Console.ForegroundColor = ConsoleColor.Yellow;
@@ -24,15 +25,15 @@ namespace RecipePart2
 
             bool exit = false;
 
-            //add welcome message for the user
+            // Add welcome message for the user
             Console.ForegroundColor = ConsoleColor.Yellow;
             Console.WriteLine("Welcome to The GoodFood Recipe Application!");
             Console.ResetColor();
 
-            //create loop for user interaction
+            // Create loop for user interaction
             while (!exit)
             {
-                //App menu options
+                // App menu options
                 Console.WriteLine("\nPlease Select an option\n"
                                   + "1. - Enter new Recipe\n"
                                   + "2. - Enter Recipe Details\n"
@@ -43,10 +44,10 @@ namespace RecipePart2
                                   + "7. - Clear All Data\n"
                                   + "8. - Exit Program");
 
-                int choice; //declare int variable for the number options
+                int choice; // Declare int variable for the number options
                 if (int.TryParse(Console.ReadLine(), out choice))
                 {
-                    //switch case to handle user choice
+                    // Switch case to handle user choice
                     switch (choice)
                     {
                         case 1:
@@ -74,9 +75,9 @@ namespace RecipePart2
                             exit = true;
                             break;
                         default:
-                            //add colour for the error message 
+                            // Add color for the error message 
                             Console.ForegroundColor = ConsoleColor.Red;
-                            //add error message for invalid choice selection
+                            // Add error message for invalid choice selection
                             Console.WriteLine("Invalid selection. Please kindly try again.");
                             Console.ResetColor();
                             break;
@@ -85,55 +86,69 @@ namespace RecipePart2
                 else
                 {
                     Console.ForegroundColor = ConsoleColor.Red;
-                    //add error message for invalid input
+                    // Add error message for invalid input
                     Console.WriteLine("Invalid input. Please enter a number from the options");
                     Console.ResetColor();
                 }
 
                 Console.WriteLine();
-
             }
         }
     }
 
-    //create an ingredient class to represent each ingredient type in the recipe
+    class RecipeDetails
+    {
+        public List<string> recipeNames { get; set; }
+        public List<Ingredient> Ingredients { get; set; }
+        public List<string> Steps { get; set; }
+        public List<string> foodgroup { get; set; }
+
+        public RecipeDetails()
+        {
+            Ingredients = new List<Ingredient>();
+            Steps = new List<string>();
+            recipeNames = new List<string>();
+            foodgroup = new List<string>();
+        }
+    }
+
+    // Create an ingredient class to represent each ingredient type in the recipe
     class Ingredient
     {
-        //add get and set methods
+        // Add get and set methods
         public string Name { get; set; }
         public double Quantity { get; set; }
         public string UnitOfMeasurement { get; set; }
         public double OriginalQuantity { get; set; }
         public double Calories { get; set; }
-        public string Foodgroup { get; set; }
+        public string FoodGroup { get; set; }
 
-
-        //add this method to reset the ingredient quantity to its original form
+        // Add this method to reset the ingredient quantity to its original form
         public void ResetQuantity()
         {
             Quantity = OriginalQuantity;
         }
     }
 
-
-    //create recipe class
+    // Create recipe class
     class Recipe
     {
-
         private List<Ingredient> ingredients;
         private List<string> steps;
         private List<string> recipeNames;
-        private List<string> foodgroup;
-        //declare event for calorie notification
-        public event CalorieNotification NotifyCalorieExceedance;
+        private List<string> foodGroups;
+        private Dictionary<string, RecipeDetails> recipeDetailsMap;
 
+        // Declare event for calorie notification
+        public event CalorieNotification NotifyCalorieExceedance;
 
         public Recipe()
         {
             ingredients = new List<Ingredient>();
             steps = new List<string>();
             recipeNames = new List<string>();
-            foodgroup = new List<string>();
+            foodGroups = new List<string>();
+            recipeDetailsMap = new Dictionary<string, RecipeDetails>();
         }
 
         public void EnterNewRecipe()
@@ -141,25 +156,25 @@ namespace RecipePart2
             Console.WriteLine("Please enter the name of the recipe: ");
             string recipeName = Console.ReadLine();
             recipeNames.Add(recipeName);
+            recipeNames.Sort(); // Sort the recipe names
+            recipeDetailsMap[recipeName] = new RecipeDetails();
 
             Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine("Recipe has been successfully entered!");
             Console.ResetColor();
         }
 
-        //create method to enter recipe
+        // Create method to enter recipe
         public void EnterRecipeDetails()
         {
-
             if (recipeNames.Count == 0)
             {
                 Console.ForegroundColor = ConsoleColor.Red;
-                //add error message if no recipe was found
+                // Add error message if no recipe was found
                 Console.WriteLine("No recipe found. Please enter recipe first");
                 Console.ResetColor();
                 return;
             }
-
 
             Console.ForegroundColor = ConsoleColor.DarkMagenta;
             Console.WriteLine("Please Enter the number of the recipe you want to add details to:");
@@ -170,9 +185,10 @@ namespace RecipePart2
             }
             Console.ResetColor();
 
-            // display full details of selected recipe
             if (int.TryParse(Console.ReadLine(), out selectedRecipeIndex) && selectedRecipeIndex >= 1 && selectedRecipeIndex <= recipeNames.Count)
             {
+                string selectedRecipeName = recipeNames[selectedRecipeIndex - 1];
+                RecipeDetails details = recipeDetailsMap[selectedRecipeName];
 
                 Console.WriteLine("Please enter the number of ingredients: ");
                 int numberOfIngredients;
@@ -183,161 +199,143 @@ namespace RecipePart2
                     Console.ResetColor();
                 }
 
-                //ingredients = new Ingredient[numberOfIngredients]; // Resize the array based on user input
-
-                //loop to input each ingredient
                 for (int i = 0; i < numberOfIngredients; i++)
                 {
                     Ingredient ingredient = new Ingredient();
 
-                    //ask user to enter ingredient name
                     Console.WriteLine($"Please enter the name of ingredient {i + 1}: ");
                     ingredient.Name = Console.ReadLine();
 
-                    Console.WriteLine($"Please enter the Food group for ingredient {i + 1} from the options below:\n"
-                                     + "1. - Fruit and Vegetables\n"
-                                     + "2. - Dairy\n"
-                                     + "3. - Carbohydrants and Grains\n"
-                                     + "4. - Protein\n"
-                                     + "5. - Fats and Sugars");
-                    int foodgroup;
-                    if (int.TryParse(Console.ReadLine(), out foodgroup))
-
-                        switch (foodgroup)
+                    while (true)
+                    {
+                        Console.WriteLine($"Please enter the Food group for ingredient {i + 1} from the options below:\n"
+                                         + "1. - Fruit and Vegetables\n"
+                                         + "2. - Dairy\n"
+                                         + "3. - Carbohydrates and Grains\n"
+                                         + "4. - Protein\n"
+                                         + "5. - Fats and Sugars");
+                        int foodGroupChoice;
+                        if (int.TryParse(Console.ReadLine(), out foodGroupChoice) && foodGroupChoice >= 1 && foodGroupChoice <= 5)
                         {
-                            case 1:
-                            case 2:
-                            case 3:
-                            case 4:
-                            case 5:
-                            case 6:
-                                break;
-
-                            default:
-                                Console.ForegroundColor = ConsoleColor.Red;
-                                // add error message for invalid input
-                                Console.WriteLine("Invalid selection. Please kindly try again.");
-                                Console.ResetColor();
-                                break;
-
+                            string foodGroupName = foodGroupChoice switch
+                            {
+                                1 => "Fruit and Vegetables",
+                                2 => "Dairy",
+                                3 => "Carbohydrates and Grains",
+                                4 => "Protein",
+                                5 => "Fats and Sugars",
+                                _ => "Unknown"
+                            };
+                            ingredient.FoodGroup = foodGroupName;
+                            break;
                         }
-
-                    ingredient.Foodgroup = Console.ReadLine();
+                        else
+                        {
+                            Console.ForegroundColor = ConsoleColor.Red;
+                            Console.WriteLine("Invalid selection. Please kindly try again.");
+                            Console.ResetColor();
+                        }
+                    }
 
                     while (true)
-                    //prompt user to enter ingredient quantity
-                    Console.WriteLine($"Please enter the quantity of ingredient {i + 1}: ");
-                    double ingredientQuantity;
-                    if (double.TryParse(Console.ReadLine(), out ingredientQuantity))
                     {
-                        ingredient.Quantity = ingredientQuantity;
-                        ingredient.OriginalQuantity = ingredientQuantity; // Store original quantity
-                        break;
-                    }
-                    else
-                    {
-                        //display error message for invalid input
-                        Console.ForegroundColor = ConsoleColor.Red;
-                        Console.WriteLine("Invalid input! The ingredient Quantity must be a number.");
-                        Console.ResetColor();
+                        Console.WriteLine($"Please enter the quantity of ingredient {i + 1}: ");
+                        if (double.TryParse(Console.ReadLine(), out double ingredientQuantity))
+                        {
+                            ingredient.Quantity = ingredientQuantity;
+                            ingredient.OriginalQuantity = ingredientQuantity; // Store original quantity
+                            break;
+                        }
+                        else
+                        {
+                            Console.ForegroundColor = ConsoleColor.Red;
+                            Console.WriteLine("Invalid input! The ingredient Quantity must be a number.");
+                            Console.ResetColor();
+                        }
                     }
 
-                    //prompt user to enter unit of measurement
                     Console.WriteLine($"Please enter the unit of measurement for ingredient {i + 1}: ");
                     ingredient.UnitOfMeasurement = Console.ReadLine();
 
-                    Console.WriteLine($"Please enter the number of calories for ingredient {i + 1} (per unit of measurent e.g per liters/cup): ");
-                    double ingredientCalories;
-                    if (double.TryParse(Console.ReadLine(), out ingredientCalories))
+                    while (true)
                     {
-                        ingredient.Calories = ingredientCalories;
-                        //ingredient.OriginaCalories = ingredientCalories; // Store original quantity
-                    }
-                    else
-                    {
-                        //display error message for invalid input
-                        Console.ForegroundColor = ConsoleColor.Red;
-                        Console.WriteLine("Invalid input! The ingredient calories must be a number.");
-                        Console.ResetColor();
-                        return;
+                        Console.WriteLine($"Please enter the number of calories for ingredient {i + 1} (per unit of measurement e.g per liters/cup): ");
+                        if (double.TryParse(Console.ReadLine(), out double ingredientCalories))
+                        {
+                            ingredient.Calories = ingredientCalories;
+                            break;
+                        }
+                        else
+                        {
+                            Console.ForegroundColor = ConsoleColor.Red;
+                            Console.WriteLine("Invalid input! The ingredient calories must be a number.");
+                            Console.ResetColor();
+                        }
                     }
 
-                    ingredients.Add(ingredient);
+                    details.Ingredients.Add(ingredient);
                 }
 
-                //ask user to enter the number of steps
                 Console.WriteLine($"Enter the number of steps: ");
                 int numberOfSteps;
-                while (true)
+                while (!int.TryParse(Console.ReadLine(), out numberOfSteps))
                 {
-                    if (!int.TryParse(Console.ReadLine(), out numberOfSteps))
-                    {
-                        //add error message for invalid input
-                        Console.ForegroundColor = ConsoleColor.Red;
-                        Console.WriteLine("Invalid input! Please enter a valid positive integer i.e. a number.");
-                        Console.ResetColor();
-                        continue;
-                    }
-                    break;
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("Invalid input! Please enter a valid positive integer i.e. a number.");
+                    Console.ResetColor();
                 }
 
-                //steps = new string[numberOfSteps]; // Resize the array based on user input
-
-                //loop to input each step
                 for (int i = 0; i < numberOfSteps; i++)
                 {
                     Console.WriteLine($"Please enter a description of what the user should do for step {i + 1}:");
-                    steps.Add(Console.ReadLine());
+                    details.Steps.Add(Console.ReadLine());
                 }
 
-                //add successful message 
                 Console.ForegroundColor = ConsoleColor.Green;
                 Console.WriteLine("Recipe details have been successfully entered!");
                 Console.ResetColor();
             }
+            else
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("Invalid input! Please select a valid recipe number.");
+                Console.ResetColor();
+            }
         }
 
-        //add method is display the full recipe
-
-        //display a list of all the recipes to the user in alphabetical order by name
-        /// <summary>
-        /// 
-        /// </summary>
         public void DisplayListOfRecipes()
         {
             if (recipeNames.Count == 0)
             {
                 Console.ForegroundColor = ConsoleColor.Red;
-                //add error message if no recipe name was found
-                Console.WriteLine("No recipes found. Please enter recipes first");
+                // Add error message if no recipe was found
+                Console.WriteLine("No recipe found. Please enter recipe first");
                 Console.ResetColor();
                 return;
             }
 
-            Console.WriteLine("Your List of Recipes");
-            foreach (string recipeName in recipeNames.OrderBy(name => name))
+            Console.ForegroundColor = ConsoleColor.Blue;
+            Console.WriteLine("List of recipes:");
+            foreach (string recipeName in recipeNames)
             {
-                Console.ForegroundColor = ConsoleColor.DarkMagenta;
                 Console.WriteLine(recipeName);
-                Console.ResetColor();
             }
+            Console.ResetColor();
         }
-        // user can choose which recipe to display from the list
 
         public void DisplayFullRecipe()
         {
-            if (ingredients.Count == 0 || steps.Count == 0)
+            if (recipeNames.Count == 0)
             {
-                //add colour to error message to make it stand out
                 Console.ForegroundColor = ConsoleColor.Red;
-                //add error message if no recipe details were found
-                Console.WriteLine("No recipe details found. Please enter recipe details first");
+                // Add error message if no recipe was found
+                Console.WriteLine("No recipe found. Please enter recipe first");
                 Console.ResetColor();
                 return;
             }
 
             Console.ForegroundColor = ConsoleColor.DarkMagenta;
-            Console.WriteLine("Please Enter the number of the recipe you want to view:");
+            Console.WriteLine("Please Enter the number of the recipe you want to display:");
             int selectedRecipeIndex;
             for (int i = 0; i < recipeNames.Count; i++)
             {
@@ -345,75 +343,48 @@ namespace RecipePart2
             }
             Console.ResetColor();
 
-
-            // display full details of selected recipe
             if (int.TryParse(Console.ReadLine(), out selectedRecipeIndex) && selectedRecipeIndex >= 1 && selectedRecipeIndex <= recipeNames.Count)
             {
-                Console.ForegroundColor = ConsoleColor.Cyan;
-                selectedRecipeIndex--;
-                Console.WriteLine($"How to make {recipeNames[selectedRecipeIndex]} in just {steps.Count} simple step(s).");
-                Console.WriteLine($"Let's get started!");
+                string selectedRecipeName = recipeNames[selectedRecipeIndex - 1];
+                RecipeDetails details = recipeDetailsMap[selectedRecipeName];
 
-                Console.WriteLine($"\nName of Recipe: {recipeNames[selectedRecipeIndex]}");
-                Console.WriteLine($"Number of ingredients: {ingredients.Count}");
-                Console.WriteLine($"Number of steps: {steps.Count} ");
-
-                //output the recipe ingredients
-                Console.WriteLine("\nIngredients:");
-                for (int i = 0; i < ingredients.Count; i++)
+                if (details.Ingredients.Count == 0 || details.Steps.Count == 0)
                 {
-                    Console.WriteLine($" {i + 1}. {ingredients[i].Quantity} {ingredients[i].UnitOfMeasurement} of {ingredients[i].Name}");
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("No recipe details found. Please enter recipe details first.");
+                    Console.ResetColor();
+                    return;
                 }
 
-                //display the recipe steps
-                Console.WriteLine("\nSteps:");
-                for (int i = 0; i < steps.Count; i++)
+                Console.ForegroundColor = ConsoleColor.Cyan;
+                Console.WriteLine($"How to make {selectedRecipeName} in just {details.Steps.Count} simple step(s).");
+                Console.WriteLine($"Let's get started!");
+
+                Console.WriteLine($"\nName of Recipe: {selectedRecipeName}");
+                Console.WriteLine($"Number of ingredients: {details.Ingredients.Count}");
+                Console.WriteLine($"Number of steps: {details.Steps.Count}");
+
+                Console.WriteLine("\nIngredients:");
+                for (int i = 0; i < details.Ingredients.Count; i++)
                 {
-                    Console.WriteLine($"Step {i + 1}: {steps[i]}");
+                    Console.WriteLine($" {i + 1}. {details.Ingredients[i].Quantity} {details.Ingredients[i].UnitOfMeasurement} of {details.Ingredients[i].Name}");
+                }
+
+                Console.WriteLine("\nSteps:");
+                for (int i = 0; i < details.Steps.Count; i++)
+                {
+                    Console.WriteLine($"Step {i + 1}: {details.Steps[i]}");
                 }
 
                 Console.WriteLine("\nNutritional Facts: ");
-
-                //for (int i = 0; i < ingredients.Count; i++)
-                foreach (Ingredient ingredient in ingredients)
+                foreach (Ingredient ingredient in details.Ingredients)
                 {
-                    string foodGroupName = "";
-                    switch (ingredient.Foodgroup)
-                    {
-                        case "1":
-                            ingredient.Foodgroup = "Fruit and Vegetables";
-                            break;
-                        case "2":
-                            ingredient.Foodgroup = "Dairy";
-                            break;
-                        case "3":
-                            ingredient.Foodgroup = "Carbohydrates and Grains";
-                            break;
-                        case "4":
-                            ingredient.Foodgroup = "Fruit and Vegetables";
-                            break;
-                        case "5":
-                            ingredient.Foodgroup = "Protein ";
-                            break;
-                        case "6":
-                            ingredient.Foodgroup = "Other";
-                            break;
-                        default:
-                            //add colour for the error message 
-                            Console.ForegroundColor = ConsoleColor.Red;
-                            //add error message for invalid choice selection
-                            Console.WriteLine("Invalid selection. Please kindly try again.");
-                            Console.ResetColor();
-                            break;
-
-                    }
-                    //ingredient.Foodgroup = foodGroupName;
-                    Console.WriteLine($"{ingredient.Name} belongs to food group: {foodgroup}");
+                    Console.WriteLine($"{ingredient.Name} belongs to food group: {ingredient.FoodGroup}");
                 }
 
-                //the software shall notify the user when the total calories of a recipe exceed 300
-                double totalCalories = ingredients.Sum(ingredient => ingredient.Calories * ingredient.Quantity);
+                double totalCalories = details.Ingredients.Sum(ingredient => ingredient.Calories * ingredient.Quantity);
                 Console.WriteLine($"\nTotal Calories: {totalCalories}");
+                Console.WriteLine($"(Note: Calories are units of energy that our bodies get from the food and drinks we consume)");
                 if (totalCalories > 300 && NotifyCalorieExceedance != null)
                 {
                     NotifyCalorieExceedance(totalCalories);
@@ -430,14 +401,13 @@ namespace RecipePart2
                 Console.ResetColor();
             }
         }
-        // add method to scale the recipe quantity///
+
         public void ScaleRecipe()
         {
-            if (ingredients.Count == 0)
+            if (recipeNames.Count == 0)
             {
-                //add colour to the error message
                 Console.ForegroundColor = ConsoleColor.Red;
-                //add error message if no recipe details are found
+                // Add error message if no recipe was found
                 Console.WriteLine("No recipe details found. Please enter recipe details first");
                 Console.ResetColor();
                 return;
@@ -451,19 +421,27 @@ namespace RecipePart2
                 Console.WriteLine($"{i + 1}. {recipeNames[i]}");
             }
             Console.ResetColor();
+
             if (int.TryParse(Console.ReadLine(), out selectedRecipeIndex) && selectedRecipeIndex >= 1 && selectedRecipeIndex <= recipeNames.Count)
             {
-                selectedRecipeIndex--;
-                Console.WriteLine("Please enter the scaling factor from one of these options\n"
-                               + " 0.5 (Scale by a half)\n"
-                               + " 2 (Scale by a double)\n"
-                               + " 3 ( Scale by a triple");
-                double scaleFactor;
-                if (!double.TryParse(Console.ReadLine(), out scaleFactor))
+                string selectedRecipeName = recipeNames[selectedRecipeIndex - 1];
+                RecipeDetails details = recipeDetailsMap[selectedRecipeName];
+
+                if (details.Ingredients.Count == 0 || details.Steps.Count == 0)
                 {
-                    //add colour to error message
                     Console.ForegroundColor = ConsoleColor.Red;
-                    //display error message for invalid input
+                    Console.WriteLine("No recipe details found. Please enter recipe details first.");
+                    Console.ResetColor();
+                    return;
+                }
+
+                Console.WriteLine("Please enter the scaling factor from one of these options\n"
+                                   + " 0.5 (Scale by a half)\n"
+                                   + " 2 (Scale by a double)\n"
+                                   + " 3 ( Scale by a triple)");
+                if (!double.TryParse(Console.ReadLine(), out double scaleFactor))
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
                     Console.WriteLine("Invalid input! Scaling factor must be a number");
                     Console.ResetColor();
                     return;
@@ -474,24 +452,19 @@ namespace RecipePart2
                     case 0.5:
                     case 2:
                     case 3:
-
-                        foreach (Ingredient ingredient in ingredients)
+                        foreach (Ingredient ingredient in details.Ingredients)
                         {
                             ingredient.Quantity = ingredient.OriginalQuantity * scaleFactor;
                         }
                         Console.ForegroundColor = ConsoleColor.Green;
-                        //show success message
                         Console.WriteLine("You have successfully scaled the recipe");
                         Console.ResetColor();
                         break;
-
                     default:
                         Console.ForegroundColor = ConsoleColor.Red;
-                        // add error message for invalid input
                         Console.WriteLine("Invalid input! Scaling factor must be 0.5, 2 or 3");
                         Console.ResetColor();
                         break;
-
                 }
             }
             else
@@ -502,13 +475,12 @@ namespace RecipePart2
             }
         }
 
-        //add method
         public void ResetQuantities()
         {
-            if (ingredients.Count == 0)
+            if (recipeNames.Count == 0)
             {
                 Console.ForegroundColor = ConsoleColor.Red;
-                //add error message if no recipe details are foung
+                // Add error message if no recipe was found
                 Console.WriteLine("No recipe details found. Please enter recipe details first");
                 Console.ResetColor();
                 return;
@@ -522,17 +494,25 @@ namespace RecipePart2
                 Console.WriteLine($"{i + 1}. {recipeNames[i]}");
             }
             Console.ResetColor();
+
             if (int.TryParse(Console.ReadLine(), out selectedRecipeIndex) && selectedRecipeIndex >= 1 && selectedRecipeIndex <= recipeNames.Count)
             {
-                selectedRecipeIndex--;
+                string selectedRecipeName = recipeNames[selectedRecipeIndex - 1];
+                RecipeDetails details = recipeDetailsMap[selectedRecipeName];
 
-                //reset each ingredient quantity
-                foreach (Ingredient ingredient in ingredients)
+                if (details.Ingredients.Count == 0 || details.Steps.Count == 0)
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("No recipe details found. Please enter recipe details first.");
+                    Console.ResetColor();
+                    return;
+                }
+
+                foreach (Ingredient ingredient in details.Ingredients)
                 {
                     ingredient.ResetQuantity();
                 }
 
-                //add colour for message
                 Console.ForegroundColor = ConsoleColor.Green;
                 Console.WriteLine("Resetting quantities to original values.....");
                 Console.WriteLine("Quantities have reset to original values successfully!");
@@ -546,13 +526,12 @@ namespace RecipePart2
             }
         }
 
-        //create method to clear all the reipe data
         public void ClearAllData()
         {
-            if (ingredients.Count == 0)
+            if (recipeNames.Count == 0)
             {
-                // Display error message if no recipe details were found
                 Console.ForegroundColor = ConsoleColor.Red;
+                // Add error message if no recipe was found
                 Console.WriteLine("No recipe details found. Please enter recipe details first");
                 Console.ResetColor();
                 return;
@@ -566,33 +545,34 @@ namespace RecipePart2
                 Console.WriteLine($"{i + 1}. {recipeNames[i]}");
             }
             Console.ResetColor();
+
             if (int.TryParse(Console.ReadLine(), out selectedRecipeIndex) && selectedRecipeIndex >= 1 && selectedRecipeIndex <= recipeNames.Count)
             {
-                selectedRecipeIndex--;
-                //ask user for confirmation before clearing
+                string selectedRecipeName = recipeNames[selectedRecipeIndex - 1];
+                RecipeDetails details = recipeDetailsMap[selectedRecipeName];
+
+                if (details.Ingredients.Count == 0 || details.Steps.Count == 0)
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("No recipe details found. Please enter recipe details first.");
+                    Console.ResetColor();
+                    return;
+                }
+
                 Console.WriteLine("Are you sure you want to clear all data? (Y/N)");
                 string confirmation = Console.ReadLine().ToUpper();
 
-                //check the user's confirmation
                 if (confirmation == "Y")
                 {
-                    //clear all the ingredients and steps
-                    //ingredients = new Ingredient[0];  // Resetting to empty arrays
-                    //steps = new string[0];
-                    ingredients.Clear();
-                    steps.Clear();
-
-                    //ingredientCount = 0;  // Resetting ingredientCount
-                    //stepCount = 0;  // Resetting stepCount
+                    recipeDetailsMap.Remove(selectedRecipeName);
+                    recipeNames.RemoveAt(selectedRecipeIndex - 1);
 
                     Console.ForegroundColor = ConsoleColor.Green;
-                    //display success message
-                    Console.WriteLine("All data has been cleared successfully!");
+                    Console.WriteLine($"Recipe {selectedRecipeName} and its data have been cleared successfully!");
                     Console.ResetColor();
                 }
                 else
                 {
-                    //diplay message for the cancellation of clearing the data
                     Console.ForegroundColor = ConsoleColor.Yellow;
                     Console.WriteLine("Operation canceled. Data remains intact.");
                     Console.ResetColor();
