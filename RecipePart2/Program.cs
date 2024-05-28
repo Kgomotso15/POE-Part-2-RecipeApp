@@ -285,6 +285,7 @@ namespace RecipeAppPart2
                     details.Ingredients.Add(ingredient);
                 }
 
+                //get number of steps
                 Console.WriteLine($"Please Enter the number of steps: ");
                 int numberOfSteps;
                 while (!int.TryParse(Console.ReadLine(), out numberOfSteps))
@@ -294,6 +295,7 @@ namespace RecipeAppPart2
                     Console.ResetColor();
                 }
 
+                //get steps details
                 for (int i = 0; i < numberOfSteps; i++)
                 {
                     Console.WriteLine($"Please enter a description of what the user should do for step {i + 1}:");
@@ -323,6 +325,7 @@ namespace RecipeAppPart2
                 return;
             }
 
+            //display list of recipes
             Console.ForegroundColor = ConsoleColor.Blue;
             Console.WriteLine("List of recipes:");
             foreach (string recipeName in recipeNames)
@@ -332,6 +335,7 @@ namespace RecipeAppPart2
             Console.ResetColor();
         }
 
+        //method to see full recipe
         public void DisplayFullRecipe()
         {
             if (recipeNames.Count == 0)
@@ -343,14 +347,14 @@ namespace RecipeAppPart2
                 return;
             }
 
-            Console.ForegroundColor = ConsoleColor.DarkMagenta;
             Console.WriteLine("Please Enter the number of the recipe you want to display:");
             int selectedRecipeIndex;
             for (int i = 0; i < recipeNames.Count; i++)
             {
+                Console.ForegroundColor = ConsoleColor.DarkMagenta;
                 Console.WriteLine($"{i + 1}. {recipeNames[i]}");
+                Console.ResetColor();
             }
-            Console.ResetColor();
 
             if (int.TryParse(Console.ReadLine(), out selectedRecipeIndex) && selectedRecipeIndex >= 1 && selectedRecipeIndex <= recipeNames.Count)
             {
