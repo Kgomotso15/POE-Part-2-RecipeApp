@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace RecipeAppPart2
+namespace RecipePart2
 {
     // Define delegate type for calorie notification
     public delegate void CalorieNotification(double totalCalories);
@@ -154,6 +154,14 @@ namespace RecipeAppPart2
             recipeNames = new List<string>();
             foodGroups = new List<string>();
             recipeDetailsMap = new Dictionary<string, RecipeDetails>();
+        }
+
+      
+
+        // Method to calculate total calories
+        public double CalculateTotalCalories()
+        {
+            return ingredients.Sum(ingredient => ingredient.Calories * ingredient.Quantity);
         }
 
         //method to enter a new recipe
